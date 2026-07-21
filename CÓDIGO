@@ -1,0 +1,326 @@
+//**********************************************
+//Universidad del Valle de Guatemala
+//Nombre: Stephany Mejía Morataya
+//Fecha: 18/07/2026
+//Curso: Electronica digital 2
+//Laboratorio 1: Contador de decadas y binario
+//***********************************************
+
+//-----------------------------------------------------------
+// LIBRERÍAS
+//-----------------------------------------------------------
+
+#include <stdio.h>
+#include <stdint.h>
+#include <Arduino.h> // Arduino
+
+//-----------------------------------------------------------
+// DECLARACIÓN DE LOS LEDs
+//-----------------------------------------------------------
+
+// Cada variable guarda el número del GPIO donde está conectado
+// cada LED.
+
+
+int led0 = 4; // led0 representa el bit menos significativo y tiene valor 1.
+int led1 = 16; // led1 representa el valor 2.
+int led2 = 17;// led2 representa el valor 4.
+int led3 = 18;// led3 representa el bit más significativo y tiene valor 8.
+
+
+//-----------------------------------------------------------
+// DECLARACIÓN DE LOS BOTONES
+//-----------------------------------------------------------
+
+int Bmas = 39; // GPIO 39: botón para aumentar el contador.
+int Bmenos = 34;// GPIO 34: botón para disminuir el contador.
+int Bmod = 35; // GPIO 35: botón para cambiar de modo.
+
+
+//-----------------------------------------------------------
+// VARIABLES DEL PROGRAMA
+//-----------------------------------------------------------
+
+// Guarda el número actual del contador.
+
+// Variable del contador
+int contador = 0; //Muestra 0
+
+// Guarda el modo de funcionamiento.
+// modo = 0: contador de décadas, de 0 a 9.
+// modo = 1: contador binario, de 0 a 15.
+int modo = 0;
+
+
+//-----------------------------------------------------------
+// FUNCIÓN DE ANTIRREBOTE
+//-----------------------------------------------------------
+
+
+void esperarSoltar(int boton)
+{
+  delay(50); // Antirrebote
+
+  while (digitalRead(boton) == HIGH)
+  {
+    // Mientras el botón siga presionado, el programa espera.
+
+  }
+
+  delay(50); // Antirrebote al soltar
+}
+
+
+//-----------------------------------------------------------
+// CONFIGURACIÓN INICIAL
+//-----------------------------------------------------------
+
+void setup()
+{
+  pinMode(led0, OUTPUT); //LEDS salidas
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+
+  // resistencias pull-down físicas
+  pinMode(Bmas, INPUT);
+  pinMode(Bmenos, INPUT);
+  pinMode(Bmod, INPUT);
+}
+
+
+//-----------------------------------------------------------
+// PROGRAMA PRINCIPAL
+//----------------------------------------------------------
+
+void loop()
+{
+  // CAMBIO DE MODO
+  if (digitalRead(Bmod) == HIGH)   // digitalRead lee el estado del botón.
+
+ // Si se encuentra en modo décadas, cambia a binario.
+  {
+    if (modo == 0)
+    {
+      modo = 1;
+    }
+        // Si se encuentra en modo binario, cambia a décadas.
+    else
+    {
+      modo = 0; 
+    }
+
+    // Cada vez que se cambia de modo, el contador vuelve a 0
+    contador = 0;
+
+    esperarSoltar(Bmod);
+  }
+
+  
+  //---------------------------------------------------------
+  // AUMENTAR EL CONTADOR
+  //---------------------------------------------------------
+
+  if (digitalRead(Bmas) == HIGH)
+  {   // Aumenta el valor del contador en una unidad.
+
+    contador++;
+
+    //-------------------------------------------------------
+    // MODO 0: CONTADOR DE DÉCADAS
+    //----------------------------------------------------------
+//  valores de 0 a 9.
+    if (modo == 0)
+    { // Si el contador supera 9, regresa a 0.
+
+      if (contador > 9)
+      {
+        contador = 0;
+      }
+    }
+
+    //-------------------------------------------------------
+    // MODO 1: CONTADOR BINARIO
+    //-------------------------------------------------------
+    //Valores de 0 a 15
+    if (modo == 1)
+    { // Si el contador supera 15, regresa a 0.
+      if (contador > 15)
+      {
+        contador = 0;
+      }
+    }
+
+    esperarSoltar(Bmas);
+  }
+
+  
+
+  //---------------------------------------------------------
+  // DISMINUIR EL CONTADOR
+  //---------------------------------------------------------
+
+  if (digitalRead(Bmenos) == HIGH)
+  { //Dismunuye una unidad
+    contador--;
+
+   //-------------------------------------------------------
+  // MODO 0: CONTADOR DE DÉCADAS
+  //-------------------------------------------------------
+
+    if (modo == 0)
+    { // Si el contador baja de 0, pasa al valor máximo -> 9
+
+      if (contador < 0)
+      {
+        contador = 9;
+      }
+    }
+    //-------------------------------------------------------
+    // MODO 1: CONTADOR BINARIO
+    //-------------------------------------------------------
+
+    if (modo == 1)
+    {   // Si el contador baja de 0, pasa al valor máximo -> 15
+
+      if (contador < 0)
+      {
+        contador = 15;
+      }
+    }
+
+    esperarSoltar(Bmenos);
+  }
+
+  //---------------------------------------------------------
+  // CONTADOR LEDS
+
+//ORDEN DE NÚMEROS
+  if (contador == 0)
+  {
+    digitalWrite(led0, LOW);
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, LOW);
+    digitalWrite(led3, LOW);
+  }
+
+  if (contador == 1)
+  {
+    digitalWrite(led0, HIGH);
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, LOW);
+    digitalWrite(led3, LOW);
+  }
+
+  if (contador == 2)
+  {
+    digitalWrite(led0, LOW);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, LOW);
+    digitalWrite(led3, LOW);
+  }
+
+  if (contador == 3)
+  {
+    digitalWrite(led0, HIGH);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, LOW);
+    digitalWrite(led3, LOW);
+  }
+
+  if (contador == 4)
+  {
+    digitalWrite(led0, LOW);
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, HIGH);
+    digitalWrite(led3, LOW);
+  }
+
+  if (contador == 5)
+  {
+    digitalWrite(led0, HIGH);
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, HIGH);
+    digitalWrite(led3, LOW);
+  }
+
+  if (contador == 6)
+  {
+    digitalWrite(led0, LOW);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, HIGH);
+    digitalWrite(led3, LOW);
+  }
+
+  if (contador == 7)
+  {
+    digitalWrite(led0, HIGH);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, HIGH);
+    digitalWrite(led3, LOW);
+  }
+
+  if (contador == 8)
+  {
+    digitalWrite(led0, LOW);
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, LOW);
+    digitalWrite(led3, HIGH);
+  }
+
+  if (contador == 9)
+  {
+    digitalWrite(led0, HIGH);
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, LOW);
+    digitalWrite(led3, HIGH);
+  }
+
+  if (contador == 10)
+  {
+    digitalWrite(led0, LOW);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, LOW);
+    digitalWrite(led3, HIGH);
+  }
+
+  if (contador == 11)
+  {
+    digitalWrite(led0, HIGH);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, LOW);
+    digitalWrite(led3, HIGH);
+  }
+
+  if (contador == 12)
+  {
+    digitalWrite(led0, LOW);
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, HIGH);
+    digitalWrite(led3, HIGH);
+  }
+
+  if (contador == 13)
+  {
+    digitalWrite(led0, HIGH);
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, HIGH);
+    digitalWrite(led3, HIGH);
+  }
+
+  if (contador == 14)
+  {
+    digitalWrite(led0, LOW);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, HIGH);
+    digitalWrite(led3, HIGH);
+  }
+
+  if (contador == 15)
+  {
+    digitalWrite(led0, HIGH);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, HIGH);
+    digitalWrite(led3, HIGH);
+  }
+}
