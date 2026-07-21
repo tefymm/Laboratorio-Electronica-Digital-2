@@ -49,3 +49,5 @@ Al cambiar de modo, el contador se reinicia en **0**.
 - Visual Studio Code
 - Framework Arduino
 - GitHub
+
+## LINK DE WOWKI! : https://wokwi.com/projects/470168805931117569 
