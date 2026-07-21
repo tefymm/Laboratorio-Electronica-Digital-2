@@ -50,4 +50,4 @@ Al cambiar de modo, el contador se reinicia en **0**.
 - Framework Arduino
 - GitHub
 
-## LINK DE WOWKI! : https://wokwi.com/projects/470168805931117569 
+## LINK DE WOWKI! :https://wokwi.com/projects/470168805931117569
